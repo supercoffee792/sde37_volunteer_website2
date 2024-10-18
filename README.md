@@ -9,7 +9,8 @@
 - To run the backend, navigate to `/server`, activate the python virtual env for the dependencies to be recognized, then navigate to `/server/mysite` and run `python manage.py makemigrations` and `python manage.py migrate` to initialize the database. Once that is done, you can run `python manage.py runserver` to start the Django server
 
 ## Usage
-- To see the website locally, once you have started the front end using `npm run dev`, you can navigate to `localhost:3000`
+- The Django server should be running for full functionality
+- To see the website locally, once you have started the front end using `npm run dev` and the back end server using `python manage.py runserver` in `/server/mysite`, you can navigate to `localhost:3000`
 - To navigate to pages manually, you can go to `localhost:3000/{page}`, where `{page}` is a subdomain defined by the folders in `src/app` (for example, to navigate to the admin page, navigate to `localhost:3000/admin` and to go to the user profile go to `localhost:3000/userprofile`, however the user profile page is protected with a login. You can edit the user profile and add skills (will be necessary later to test volunteer matching functionality)
 - There are no "mock" prefilled objects, so you will need to create users via `localhost:3000/signup` and login to the user profile via `localhost:3000/signin`
 - Since there are no prefilled objects, events will have to be created too, so navigate to `localhost:3000/admin` (not protected with login) to create events and update them, so that `localhost:3000/findevents` can populate with events for the users/volunteers to sign up for
