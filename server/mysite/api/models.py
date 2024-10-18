@@ -51,8 +51,8 @@ class Volunteer(AbstractUser):
 
     # User credentials
     username = models.CharField(max_length=100, unique=True)
-    # email = models.EmailField()
-    USERNAME_FIELD = 'username'
+    email = models.EmailField(unique=True)
+    USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
     
     skills = models.TextField(blank=True)
@@ -66,8 +66,6 @@ class Volunteer(AbstractUser):
 
     def set_skills_list(self, skills):
         self.skills = ','.join(skills)
-
-    
     
 class Event(models.Model):
     EVENT_SKILLS = {

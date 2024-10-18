@@ -3,7 +3,6 @@ from .models import Event, Volunteer #make sure you import all classses you use
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
-from .models import Event, Volunteer
 from django.contrib.auth.hashers import make_password
 
 # Volunteer Signup/login tests
@@ -17,11 +16,12 @@ class VolunteerSignupTest(TestCase):
         url = reverse('signup')
         data = {
             'username': 'testuser',
+            'email': 'testuser@blahblah.com',
             'password': 'testpassword123',
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertTrue(Volunteer.objects.filter(username='testuser').exists())
+        self.assertTrue(Volunteer.objects.filter(email='testuser@blahblah.com').exists())
 
     def testLoginExists(self):
         url = reverse('login')
@@ -33,11 +33,13 @@ class VolunteerSignupTest(TestCase):
 
         volunteer = Volunteer.objects.create_user(
             username="testuser",
+            email="testuser@blahblah.com",
             password="password123"
         )
 
         data = {
             'username': 'testuser',
+            'email': 'testuser@blahblah.com',
             'password': 'password123',
         }
 
@@ -94,6 +96,7 @@ class UserModelTest(TestCase):
         Volunteer.objects.create(
             pfp = "bear.png",
             username = "John Doe",
+            email= "testuser@blahblah.com",
             gender = "Male",
             age ="21-30",
             address1 = "123 Main Street",
@@ -103,7 +106,7 @@ class UserModelTest(TestCase):
             zipcode = "12345", 
             skills = "Programming",
             preferences = "early mornings",
-            notififications = "new notification",
+            notifications = "new notification",
             availability = {"Tuesday": "22:36 - 06:36"}
         )
 
@@ -123,6 +126,7 @@ class UserModelTest(TestCase):
                 Volunteer.objects.create(
                     pfp="bear.png",
                     username="John Doe",
+                    email= "testuser@blahblah.com",
                     gender="Male",
                     age="21-30",
                     address1="123 Main Street",
@@ -132,74 +136,13 @@ class UserModelTest(TestCase):
                     zipcode="12345", 
                     skills="Programming",
                     preferences="early mornings",
-                    notififications="new notification",
+                    notifications="new notification",
                     availability={"Tuesday": "22:36 - 06:36"}
                 )
 
         def testVolunteerUrlExists(self):
             response = self.client.get('/api/volunteers/') 
             self.assertEqual(response.status_code, 200)
-
-        # def testVolunteerListContent(self):
-        #     response = self.client.get('/api/volunteers/')
-        #     self.assertEqual(response.status_code, 200)
-        #     self.assertContains(response, "Volunteer 0")  # Check for one of the volunteer usernames
-
-
-##SECOND SOLN?
-
-# class VolunteerModelTest(TestCase):
-#     @classmethod
-#     def setUpTestData(cls):
-#         Volunteer.objects.create(
-#             pfp="bear.png",
-#             username="John Doe",
-#             gender="Male",
-#             age="21-30",
-#             address1="123 Main Street",
-#             address2="Apt 533",
-#             state="AL",
-#             city="Huntsville",
-#             zipcode="12345", 
-#             skills="Programming",
-#             preferences="early mornings",
-#             notifications="new notification",
-#             availability={"Tuesday": "22:36 - 06:36"}
-#         )
-    
-#     def test_volunteer_creation(self):
-#         example = Volunteer.objects.get(username="John Doe")
-#         self.assertEqual(example.gender, "Male")
-
-# class VolunteerViewTest(TestCase):
-#     @classmethod
-#     def setUpTestData(cls):
-#         num_volunteers = 5
-#         for volunteer_id in range(num_volunteers):
-#             Volunteer.objects.create(
-#                 pfp="bear.png",
-#                 username=f"Volunteer {volunteer_id}",
-#                 gender="Male",
-#                 age="21-30",
-#                 address1="123 Main Street",
-#                 address2="Apt 533",
-#                 state="AL",
-#                 city="Huntsville",
-#                 zipcode="12345", 
-#                 skills="Programming",
-#                 preferences="early mornings",
-#                 notifications="new notification",
-#                 availability={"Tuesday": "22:36 - 06:36"}
-#             )
-
-#     def test_volunteer_url_exists(self):
-#         response = self.client.get('/api/volunteers/') 
-#         self.assertEqual(response.status_code, 200)
-
-#     def test_volunteer_list_content(self):
-#         response = self.client.get('/api/volunteers/')
-#         self.assertEqual(response.status_code, 200)
-#         self.assertContains(response, "Volunteer 0")  # Check for one of the volunteer usernames
 
 class EventAPITest(APITestCase):
     def test_post_view(self): # Create event view
@@ -263,6 +206,7 @@ class EventSignupTest(APITestCase):
     def setUpTestData(cls):
         cls.volunteer = Volunteer.objects.create_user(
             username="testuser",
+            email= "testuser@blahblah.com",
             password="testpassword123"
         )
         

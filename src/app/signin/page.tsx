@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 export default function Signin() {
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+    const [email, setEmail] = useState<string>("");
     const [failed, setFailed] = useState<string | null>(null);
     const router = useRouter();
 
@@ -22,7 +23,7 @@ export default function Signin() {
                 headers: {
                   'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ username, password }),
+                body: JSON.stringify({ email, password }),
               });
         
               if (!response.ok) {
@@ -35,6 +36,7 @@ export default function Signin() {
               localStorage.setItem("refresh_token", data.tokens.refresh);
               router.push('/userprofile');
               setUsername('');
+              setEmail('');
               setPassword('');
         }
         catch(err: any) {
@@ -50,11 +52,16 @@ export default function Signin() {
                 <div className="w-full max-w-md p-8 bg-700 rounded-lg">
                     <h2 className="text-2xl font-semibold mb-6 text-white">Sign In</h2>
                     <form onSubmit={handleSubmit}>
-                        <div className="mb-2">
+                        {/*<div className="mb-2">
                             <label htmlFor="username" className="block text-sm font-medium text-white">Username</label>
                             <input type="text" id="username" name="username"
                                 onChange={(e) => setUsername(e.target.value)}
                                 className="mt-1 text-white block w-full px-3 py-2 border bg-gray-900 border-blue-300 rounded-md shadow-sm focus:text-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Enter your username" required/>
+                        </div>*/}
+                        <div className="mb-2">
+                            <label htmlFor="email" className="block text-sm font-medium text-white">Email</label>
+                            <input type="email" id="email" name="email" className="mt-1 text-white block w-full px-3 py-2 border bg-gray-900 border-blue-300 rounded-md shadow-sm focus:text-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" 
+                            onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email" required/>
                         </div>
                         <div className="mb-2">
                             <label htmlFor="password" className="block text-sm font-medium text-white">Password</label>

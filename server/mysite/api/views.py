@@ -8,7 +8,7 @@ from rest_framework.generics import GenericAPIView, RetrieveAPIView
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import Volunteer, Event
-from .serializers import VolunteerSerializer, VolunteerSignupSerializer, EventSerializer, VolunteerLoginSerializer
+from .serializers import *
 from rest_framework.views import APIView
 from django.utils import timezone
 

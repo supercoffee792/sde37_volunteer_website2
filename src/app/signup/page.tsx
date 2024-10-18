@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 export default function Signup() {
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+    const [email, setEmail] = useState<string>("");
     const [failed, setFailed] = useState<string | null>(null);
     const router = useRouter();
 
@@ -21,7 +22,7 @@ export default function Signup() {
                 headers: {
                   'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ username, password }),
+                body: JSON.stringify({ username, email, password }),
               });
         
               if (!response.ok) {
@@ -32,6 +33,7 @@ export default function Signup() {
               router.push('/signin');
               setUsername('');
               setPassword('');
+              setEmail('');
         }
         catch(err: any) {
             setFailed(err.message);
@@ -54,7 +56,7 @@ export default function Signup() {
                         <div className="mb-2">
                             <label htmlFor="email" className="block text-sm font-medium text-white">Email</label>
                             <input type="email" id="email" name="email" className="mt-1 text-white block w-full px-3 py-2 border bg-gray-900 border-blue-300 rounded-md shadow-sm focus:text-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" 
-                            placeholder="Enter your email"/>
+                            onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email" required/>
                         </div>
                         <div className="mb-2">
                             <label htmlFor="password" className="block text-sm font-medium text-white">Password</label>

@@ -50,7 +50,7 @@ export default function Adminpage() {
     const [name, setName] = useState<string>("");
     const [date, setDate] = useState<string>("");
     const [location, setLocation] = useState<string>("");
-    const [urgency, setUrgency] = useState<string>("");
+    const [urgency, setUrgency] = useState<string>("Not urgent");
     const [skills, setSkills] = useState<string[]>([]);
     const [description, setDescription] = useState<string>("");
 
@@ -342,7 +342,7 @@ export default function Adminpage() {
                     </div>
                     <div className="mb-4">
                         <label htmlFor="event-urgency" className="mr-4">Urgency</label>
-                        <select className="text-black rounded-md p-1" value={urgency} onChange={(e) => setUrgency(e.target.value)}>
+                        <select className="text-black rounded-md p-1" defaultValue={"Not urgent"} onChange={(e) => setUrgency(e.target.value)}>
                             <option value="Not urgent">Not urgent</option>
                             <option value="Urgent">Urgent</option>
                             <option value="Very urgent">Very urgent</option>

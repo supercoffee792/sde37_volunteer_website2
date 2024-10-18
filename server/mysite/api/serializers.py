@@ -23,7 +23,7 @@ class VolunteerSignupSerializer(serializers.ModelSerializer):
             'password': {'write_only': True}
         }
 
-    def validate(self, attrs): # watch here
+    def validate(self, attrs):
         return attrs
 
     def create(self, validated_data):
@@ -36,11 +36,11 @@ class VolunteerSignupSerializer(serializers.ModelSerializer):
         return volunteer
 
 class VolunteerLoginSerializer(serializers.Serializer):
-    username = serializers.CharField()
+    email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
     
     def validate(self, data):
         user = authenticate(**data)
         if user and user.is_active:
             return user
-        raise serializers.ValidationError("Wrong username or password")
+        raise serializers.ValidationError("Wrong email/username or password")
