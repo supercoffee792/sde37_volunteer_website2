@@ -20,6 +20,7 @@
 - To run the unit tests, navigate to `/server/mysite` and run `python manage.py test`, which will show details about the tests in the your terminal
 
 ## Troubleshooting
+- If you are on Mac, when running python commands, you may want to replace `python` with `python3`
 - If Django dependencies are not recognized, remember to activate the python virtual environment in `/server`
 - Sometimes the dependencies for Django in `/server` are not recognized, so it is best to open the `/server` project in your text editor as the head folder (for example, in VS Code, have the `/server` folder in the top right as the uppermost folder
 - When running `python manage.py makemigrations` and `python manage.py migrate` in `/server/mysite`, sometimes there will be errors regarding the database. A fix would be to delete the `db.sqlite3` file in `/server/mysite` and also deleting the numbered migration files in `/server/mysite/api/migrations`, then rerunning `python manage.py makemigrations` and `python manage.py migrate`
