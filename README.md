@@ -16,6 +16,7 @@
 - Since there are no prefilled objects, events will have to be created too, so navigate to `localhost:3000/admin` (not protected with login) to create events and update them, so that `localhost:3000/findevents` can populate with events for the users/volunteers to sign up for
 - For volunteer matching, events have skills needed and volunteers have skills defined in their user profiles. You can filter volunteers with matching skills at the bottom of `localhost:3000/admin` to test volunteer matching
 - For notifications, if an event the volunteer is signed up for is updated, it will send a notification to the user profile page notifying the volunteer that the event has been updated
+- Login sessions only last for 30 minutes everytime you login, so make sure to login again if testing longer than 30 minutes at a time otherwise an authorization error will pop up if you stay on the page logged in for more than 30 minutes since the token expired.
 
 ### Unit testing
 - To run the unit tests, navigate to `/server/mysite` and run `python manage.py test`, which will show details about the tests in the your terminal
@@ -25,6 +26,7 @@
 - If Django dependencies are not recognized, remember to activate the python virtual environment in `/server`
 - Sometimes the dependencies for Django in `/server` are not recognized, so it is best to open the `/server` project in your text editor in a separate instance as the head folder (for example, in VS Code, have the `/server` folder in the top right as the uppermost folder, along with another window with the main folder as the head folder to run the front end)
 - When running `python manage.py makemigrations` and `python manage.py migrate` in `/server/mysite`, sometimes there will be errors regarding the database. A fix would be to delete the `db.sqlite3` file in `/server/mysite` and also deleting the numbered migration files in `/server/mysite/api/migrations`, then rerunning `python manage.py makemigrations` and `python manage.py migrate`
+- Because the login session uses a JWT token, the login session only lasts for 30 minutes at a time, then you have to re login to get access to the user profile. Otherwise, you will receive an authorization error
 
 # -----
 
