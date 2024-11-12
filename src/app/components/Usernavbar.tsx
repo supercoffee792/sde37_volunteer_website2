@@ -20,6 +20,11 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
                             <li><Link href="/findevents" className="hover:underline">Find Events</Link></li>
                         </ul>
                     </nav>
+                    <nav>
+                        <ul className="flex space-x-6">
+                            <li><Link href="/admin" className="hover:underline">Event Management</Link></li>
+                        </ul>
+                    </nav>
                 </div>
                 <nav>
                     <ul className="flex space-x-6">
