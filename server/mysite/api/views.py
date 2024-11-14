@@ -11,6 +11,13 @@ from .models import Volunteer, Event
 from .serializers import *
 from rest_framework.views import APIView
 from django.utils import timezone
+from django.http import HttpResponse
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.platypus import Paragraph, Table, TableStyle
+from reportlab.lib.units import inch
 
 # Login / Signup operations
 @api_view(['POST'])
@@ -189,3 +196,142 @@ def event_signup(request, pk):
 
     except Event.DoesNotExist:
         return Response({"error": "Event not found"}, status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['GET'])
+def generate_pdf(request):
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="volunteer_report.pdf"'
+    
+    p = canvas.Canvas(response, pagesize=A4)
+    width, height = A4
+    styles = getSampleStyleSheet()
+    
+    def draw_header(title, y_position):
+        p.setFont("Helvetica-Bold", 16)
+        p.drawString(50, y_position, title)
+        p.setLineWidth(1)
+        p.line(50, y_position - 5, width - 50, y_position - 5)
+        return y_position - 30
+
+    def add_page():
+        p.showPage()
+        p.setFont("Helvetica", 12)
+        return height - 50
+
+    # Volunteer Participation Report
+    y_position = height - 50
+    y_position = draw_header("Volunteer Participation Report", y_position)
+    
+    volunteers = Volunteer.objects.all().prefetch_related('events')
+    
+    # Volunteer
+    for volunteer in volunteers:
+        if y_position < 100:
+            y_position = add_page()
+            
+        p.setFont("Helvetica-Bold", 12)
+        p.drawString(50, y_position, f"Volunteer: {volunteer.profilename}")
+        p.setFont("Helvetica", 10)
+        y_position -= 15
+        p.drawString(50, y_position, f"Email: {volunteer.email}")
+        y_position -= 20
+        
+        # Event History
+        events = volunteer.events.all()
+        if events:
+            data = [["Event Name", "Date", "Location", "Urgency"]]
+            for event in events:
+                data.append([
+                    event.name,
+                    event.date.strftime("%Y-%m-%d"),
+                    event.location,
+                    event.urgency
+                ])
+            
+            table = Table(data, colWidths=[2*inch, 1.2*inch, 2*inch, 1*inch])
+            table.setStyle(TableStyle([
+                ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                ('FONTSIZE', (0, 0), (-1, 0), 10),
+                ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                ('BACKGROUND', (0, 1), (-1, -1), colors.white),
+                ('TEXTCOLOR', (0, 1), (-1, -1), colors.black),
+                ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+                ('FONTSIZE', (0, 1), (-1, -1), 8),
+                ('GRID', (0, 0), (-1, -1), 1, colors.black),
+                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ]))
+            
+            table.wrapOn(p, width, height)
+            table.drawOn(p, 50, y_position - 20 - (len(data) * 20))
+            y_position = y_position - 40 - (len(data) * 20)
+        else:
+            p.drawString(50, y_position, "No event participation history")
+            y_position -= 20
+            
+        y_position -= 20
+    
+    # Event Summary Report
+    p.showPage()
+    y_position = height - 50
+    y_position = draw_header("Event Summary Report", y_position)
+    
+    events = Event.objects.all().prefetch_related('volunteers')
+    
+    # Event
+    for event in events:
+        if y_position < 100:
+            y_position = add_page()
+            
+        p.setFont("Helvetica-Bold", 12)
+        p.drawString(50, y_position, f"Event: {event.name}")
+        p.setFont("Helvetica", 10)
+        y_position -= 15
+        p.drawString(50, y_position, f"Date: {event.date.strftime('%Y-%m-%d')}")
+        y_position -= 15
+        p.drawString(50, y_position, f"Location: {event.location}")
+        y_position -= 15
+        p.drawString(50, y_position, f"Urgency: {event.urgency}")
+        y_position -= 20
+        
+        # Volunteers for the event
+        volunteers = event.volunteers.all()
+        if volunteers:
+            data = [["Volunteer Name", "Email"]]
+            for volunteer in volunteers:
+                data.append([
+                    volunteer.profilename,
+                    volunteer.email
+                ])
+            
+            table = Table(data, colWidths=[1.5*inch, 2*inch, 1.5*inch, 1.5*inch])
+            table.setStyle(TableStyle([
+                ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                ('FONTSIZE', (0, 0), (-1, 0), 10),
+                ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                ('BACKGROUND', (0, 1), (-1, -1), colors.white),
+                ('TEXTCOLOR', (0, 1), (-1, -1), colors.black),
+                ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+                ('FONTSIZE', (0, 1), (-1, -1), 8),
+                ('GRID', (0, 0), (-1, -1), 1, colors.black),
+                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ]))
+            
+            table.wrapOn(p, width, height)
+            table.drawOn(p, 50, y_position - 20 - (len(data) * 20))
+            y_position = y_position - 40 - (len(data) * 20)
+        else:
+            p.drawString(50, y_position, "No volunteers registered for this event")
+            y_position -= 20
+            
+        y_position -= 20
+    
+    p.save()
+    return response
