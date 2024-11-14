@@ -24,5 +24,6 @@ urlpatterns = [
     path("events/one/<int:pk>", get_one_event, name="get_one_event"),
 
     # reports
+    path('pdf/', generate_pdf, name='generate_pdf'),
     path("csvreport/", csv_report, name="csv_report")
 ]
