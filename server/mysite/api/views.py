@@ -1,4 +1,5 @@
 import datetime
+import csv
 from django.shortcuts import render, get_object_or_404, redirect
 from rest_framework import generics, status
 from rest_framework.response import Response
@@ -334,4 +335,32 @@ def generate_pdf(request):
         y_position -= 20
     
     p.save()
+    return response
+    
+# generate csv report
+@api_view(['GET'])
+def csv_report(request):
+    response = HttpResponse(content_type='text/csv')
+        
+    response['Content-Disposition'] = 'attachment; filename="volunteers.csv"'
+    
+    writer = csv.writer(response)
+    
+    writer.writerow(['Volunteer name', 'Events'])
+    
+    volunteers = Volunteer.objects.all()
+
+    for v in volunteers:
+        event_names = ', '.join([event.name for event in v.events.all()])
+        writer.writerow([v.profilename, event_names])
+
+    writer.writerow([])
+
+    writer.writerow(['Event name', 'Event date', 'Event urgency', 'Volunteers'])
+
+    events = Event.objects.all()
+    for event in events:
+        volunteer_names = ', '.join([volunteer.profilename for volunteer in event.volunteers.all()])
+        writer.writerow([event.name, event.date, event.urgency, volunteer_names])
+
     return response
