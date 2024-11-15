@@ -356,11 +356,11 @@ def csv_report(request):
 
     writer.writerow([])
 
-    writer.writerow(['Event name', 'Event date', 'Event urgency', 'Volunteers'])
+    writer.writerow(['Event name', 'Event date', 'Event urgency', 'Event location', 'Volunteers'])
 
     events = Event.objects.all()
     for event in events:
         volunteer_names = ', '.join([volunteer.profilename for volunteer in event.volunteers.all()])
-        writer.writerow([event.name, event.date, event.urgency, volunteer_names])
+        writer.writerow([event.name, event.date, event.urgency, event.location, volunteer_names])
 
     return response

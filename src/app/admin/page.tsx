@@ -346,6 +346,36 @@ export default function Adminpage() {
       }
     };
 
+    const downloadCSV = async () => {
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/api/csvreport`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'text/csv',
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Cant download CSV');
+        }
+
+        const blob = await response.blob();
+      
+        const url = window.URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'report.csv';
+        a.click();
+        
+        a.remove();
+        window.URL.revokeObjectURL(url);
+      }
+      catch (err) {
+        console.log(err);
+      }
+    };
+
     return (
 
       <div className="bg-slate-800 min-h-screen overflow-x-hidden">
@@ -616,7 +646,7 @@ export default function Adminpage() {
         <div className="flex justify-end items-center border-t border-gray-700 p-6 bg-slate-800 space-x-2">
           <span className="text-white mr-4">Download report:</span>
           <button onClick={downloadPDF} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">PDF</button>
-          <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">CSV</button>
+          <button onClick={downloadCSV} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">CSV</button>
         </div>
       </div>
     </div>
