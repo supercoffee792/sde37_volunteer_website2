@@ -13,13 +13,17 @@
 - To see the website locally, once you have started the front end using `npm run dev` and the back end server using `python manage.py runserver` in `/server/mysite`, you can navigate to `localhost:3000`
 - To navigate to pages manually, you can go to `localhost:3000/{page}`, where `{page}` is a subdomain defined by the folders in `src/app` (for example, to navigate to the admin page, navigate to `localhost:3000/admin` and to go to the user profile go to `localhost:3000/userprofile`, however the user profile page is protected with a login. You can edit the user profile and add skills (will be necessary later to test volunteer matching functionality)
 - There are no "mock" prefilled objects, so you will need to create users via `localhost:3000/signup` and login to the user profile via `localhost:3000/signin`
-- Since there are no prefilled objects, events will have to be created too, so navigate to `localhost:3000/admin` (not protected with login) to create events and update them, so that `localhost:3000/findevents` can populate with events for the users/volunteers to sign up for
+- Since there are no prefilled objects, events will have to be created too, so navigate to `localhost:3000/admin` (not protected with login, you can also use the "Event management" button in the navbar to navigate to the admin page) to create events and update them, so that `localhost:3000/findevents` can populate with events for the users/volunteers to sign up for
 - For volunteer matching, events have skills needed and volunteers have skills defined in their user profiles. You can filter volunteers with matching skills at the bottom of `localhost:3000/admin` to test volunteer matching
 - For notifications, if an event the volunteer is signed up for is updated, it will send a notification to the user profile page notifying the volunteer that the event has been updated
 - Login sessions only last for 30 minutes everytime you login, so make sure to login again if testing longer than 30 minutes at a time otherwise an authorization error will pop up if you stay on the page logged in for more than 30 minutes since the token expired.
 
 ### Unit testing
 - To run the unit tests, navigate to `/server/mysite` and run `python manage.py test`, which will show details about the tests in the your terminal
+
+### Generating reports
+- You have 2 options to generate reports, PDF and CSV, which will have buttons in `localhost:3000/admin` at the bottom of the page. You can also use the "Event management" button in the navbar to navigate to the admin page.
+- Make sure to generate some volunteers via signing up, generate some events, and sign up those volunteers for events so that there can be data to display in the reports.
 
 ## Troubleshooting
 - If you are on Mac, when running python commands, you may want to replace `python` with `python3`
