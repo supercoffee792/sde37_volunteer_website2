@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import Usernavbar from "../components/Usernavbar";
+import AdminNavbar from "../components/AdminNavbar";
 import { useActionState, useEffect, useState, useRef } from "react";
 import { it } from "node:test";
 
@@ -379,7 +380,7 @@ export default function Adminpage() {
     return (
 
       <div className="bg-slate-800 min-h-screen overflow-x-hidden">
-        <Usernavbar onLogout={adminLogout}/>
+        <AdminNavbar/>
         <div className="flex h-[90vh] border border-gray-700 rounded-md m-10">
             <div className="w-2/3 border-r border-gray-700 text-white p-10 overflow-auto">
                 <h2 className="text-3xl font-bold text-white mb-5">Create Event</h2>
