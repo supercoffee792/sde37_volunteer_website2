@@ -62,7 +62,7 @@ interface VolunteerData { // data types expected when creating event object
     username: string;
     zipcode: string;
     availability: Record<string, { startTime: string | null; endTime: string | null }>;
-    events: EventData[];
+    events?: EventData[];
 };
 
 const initialState = {
@@ -471,6 +471,8 @@ export default function Userprofile() {
                 setStartTime(null);
                 setEndTime(null);
 
+                
+
             } catch (error) {
                 console.error("Error updating availability:", error);
             }
@@ -748,15 +750,15 @@ export default function Userprofile() {
                         <div className="mb-4 flex-col">
                             <h2 className="text-2xl text-white font-semibold mb-4">Event History</h2>
                             <div className="bg-white p-6 rounded-lg whitespace-nowrap shadow-md flex overflow-x-auto space-x-4 max-w-full">
-                             {loginUser && loginUser.events.length > 0 ? (
-                            loginUser.events.map((event) => (
-                                <div key={event.id} className="min-w-[250px] bg-gray-100 p-4 rounded-lg overflow-x-hidden">
-                                <h3 className="text-xl font-bold">{event.name}</h3>
-                                <p className="text-sm text-gray-600">Date: {event.date}</p>
-                                <p className="text-sm text-gray-600">Location: {event.location}</p>
-                                <p className="text-sm text-gray-500">Description: {event.description}</p>
-                                </div>
-                            ))
+                             {loginUser && loginUser.events ? (
+                                loginUser.events.map((event) => (
+                                    <div key={event.id} className="min-w-[250px] bg-gray-100 p-4 rounded-lg overflow-x-hidden">
+                                    <h3 className="text-xl font-bold">{event.name}</h3>
+                                    <p className="text-sm text-gray-600">Date: {event.date}</p>
+                                    <p className="text-sm text-gray-600">Location: {event.location}</p>
+                                    <p className="text-sm text-gray-500">Description: {event.description}</p>
+                                    </div>
+                                ))
                             ) : (
                             <p className="text-gray-500">No events signed up for.</p>
                             )} 
